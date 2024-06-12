@@ -3,7 +3,7 @@ import os
 
 def main():
     builtin_cmds = ["echo", "exit", "type"]
-    PATH = os.environ.get("PATH")
+    PATH = os.environ.get("PATH").split(":")  # Split PATH into individual directories
 
     while True:
         sys.stdout.write("$ ")
@@ -22,8 +22,21 @@ def main():
 
         if user_input.startswith("type"):
             cmd = user_input.split(" ")[1]
-            cmd_path = next((f"{path}/{cmd}" for path in PATH.split(":") if os.path.isfile(f"{path}/{cmd}")), None)
-            sys.stdout.write(f"{cmd} is a shell builtin\n" if cmd in builtin_cmds else f"{cmd} is {cmd_path}\n" if cmd_path else f"{cmd} not found\n")
+
+            # Search for command in each directory in PATH
+            cmd_path = None
+            for directory in PATH:
+                if os.path.isfile(f"{directory}/{cmd}") and os.access(f"{directory}/{cmd}", os.X_OK):
+                    cmd_path = f"{directory}/{cmd}"
+                    break
+
+            # Print result
+            if cmd in builtin_cmds:
+                sys.stdout.write(f"{cmd} is a shell builtin\n")
+            elif cmd_path:
+                sys.stdout.write(f"{cmd} is {cmd_path}\n")
+            else:
+                sys.stdout.write(f"{cmd} not found\n")
             sys.stdout.flush()
             continue
 
