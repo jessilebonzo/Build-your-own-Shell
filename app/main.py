@@ -16,7 +16,7 @@ def main():
     # Wait for user input
         user_command = input()
         if user_command not in valid_commands:
-            print(f"${user_command}: command not found")
+            print(f"${user_command}: command not found\n")
             continue
 
 
