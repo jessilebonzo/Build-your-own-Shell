@@ -3,7 +3,7 @@ import sys
 
 def main():
 
-    #valid_commands = []
+    valid_commands = []
     # You can use print statements as follows for debugging, they'll be visible when running tests.
     #print("Logs from your program will appear here!")
 
@@ -14,9 +14,11 @@ def main():
         sys.stdout.write("$ ")
         sys.stdout.flush()
     # Wait for user input
-        user_input = input()
-        # user_input not in valid_commands:
-        print(f"${user_input}: command not found")
+        user_command = input()
+        if user_command not in valid_commands:
+            output = "$invalid_command_1: command not found\n"
+            print(output, end='')
+
 
 
 if __name__ == "__main__":
