@@ -1,30 +1,34 @@
 import sys
+import os
 
 def main():
-    builtins = ["echo", "exit", "type"]
-    
+    builtin_cmds = ["echo", "exit", "type"]
+    PATH = os.environ.get("PATH")
+
     while True:
-        
         sys.stdout.write("$ ")
         sys.stdout.flush()
         
-        # Wait for user input
-        full_command = input()
-        command_array = full_command.split()
-        command = command_array[0]
+        user_input = input()
         
-        if command == "exit":
+        if user_input == "exit 0":
             break
-        elif command == "echo":
-            print(" ".join(command_array[1:]))
-        elif command == "type":
-            evaled_command = command_array[1]
-            if evaled_command in builtins:
-                print(f"{evaled_command} is a shell builtin")
-            else:
-                print(f"{evaled_command} not found")
-        else:
-            print(f"{command}: command not found")
+
+        if user_input.startswith("echo"):
+            content = user_input.split(" ", 1)
+            sys.stdout.write(content[1] + "\n" if len(content) > 1 else "\n")
+            sys.stdout.flush()
+            continue
+
+        if user_input.startswith("type"):
+            cmd = user_input.split(" ")[1]
+            cmd_path = next((f"{path}/{cmd}" for path in PATH.split(":") if os.path.isfile(f"{path}/{cmd}")), None)
+            sys.stdout.write(f"{cmd} is a shell builtin\n" if cmd in builtin_cmds else f"{cmd} is {cmd_path}\n" if cmd_path else f"{cmd} not found\n")
+            sys.stdout.flush()
+            continue
+
+        sys.stdout.write(f"{user_input}: command not found\n")
+        sys.stdout.flush()
 
 if __name__ == "__main__":
     main()
