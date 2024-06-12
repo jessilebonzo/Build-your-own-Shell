@@ -6,13 +6,14 @@ def main():
 
         sys.stdout.write("$ ")
         sys.stdout.flush()
-        if command := input().strip():
-            if command == "exit 0":
+        if bulletin_commands := input().strip():
+            if bulletin_commands == "exit 0":
                 sys.exit(0)
-            elif command.startswith("echo "):
-                print(command[len("echo ") :])
-            else:
-                print(f"{command}: command not found")
+        if bulletin_commands in bulletin_commands:
+            print(f"{bulletin_commands} is a {bulletin_commands[bulletin_commands]}")
+    else:
+        print(f"{bulletin_commands}: not found")
+
                 
 if __name__ == "__main__":
     main()
