@@ -1,5 +1,5 @@
-import sys
 import os
+import sys
 
 def main():
     builtin_cmds = ["echo", "exit", "type"]
@@ -25,7 +25,7 @@ def main():
             if cmd in builtin_cmds:
                 sys.stdout.write(f"{cmd} is a shell builtin\n")
             else:
-                sys.stdout.write(f"{cmd} is {cmd_path}\n" if cmd_path else f"{cmd} not found\n")
+                sys.stdout.write(f"{cmd}: not found\n" if cmd_path is None else f"{cmd} is {cmd_path}\n")
             sys.stdout.flush()
             continue
         
