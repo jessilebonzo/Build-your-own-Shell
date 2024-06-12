@@ -2,35 +2,39 @@ import sys
 import os
 
 def main():
+    # You can use print statements as follows for debugging, they'll be visible when running tests.
+    # print("Logs from your program will appear here!")
+    # Uncomment this block to pass the first stage
+    # Wait for user input and print it back
     builtin_cmds = ["echo", "exit", "type"]
-    PATH = os.environ.get("PATH").split(":")  # Split PATH into individual directories
-
+    PATH = os.environ.get("PATH")
     while True:
         sys.stdout.write("$ ")
         sys.stdout.flush()
-        
+
         user_input = input()
-        
+
         if user_input == "exit 0":
             break
 
         if user_input.startswith("echo"):
             content = user_input.split(" ", 1)
-            sys.stdout.write(content[1] + "\n" if len(content) > 1 else "\n")
+            if len(content) > 1:
+                sys.stdout.write(content[1] + "\n")
+            else:
+                sys.stdout.write("\n")
             sys.stdout.flush()
             continue
-
+        
         if user_input.startswith("type"):
             cmd = user_input.split(" ")[1]
 
-            # Search for command in each directory in PATH
-            cmd_path = None
-            for directory in PATH:
-                if os.path.isfile(f"{directory}/{cmd}") and os.access(f"{directory}/{cmd}", os.X_OK):
-                    cmd_path = f"{directory}/{cmd}"
-                    break
 
-            # Print result
+            cmd_path = None
+            paths = PATH.split(":")
+            for path in paths:
+                if os.path.isfile(f"{path}/{cmd}"):
+                    cmd_path = f"{path}/{cmd}"
             if cmd in builtin_cmds:
                 sys.stdout.write(f"{cmd} is a shell builtin\n")
             elif cmd_path:
@@ -44,4 +48,6 @@ def main():
         sys.stdout.flush()
 
 if __name__ == "__main__":
+
     main()
+    
