@@ -1,24 +1,16 @@
 import sys
 
 def main():
-    valid_commands = []
-
+    # You can use print statements as follows for debugging, they'll be visible when running tests.
     while True:
-        # Print the prompt
+        # Uncomment this block to pass the first stage
         sys.stdout.write("$ ")
         sys.stdout.flush()
-
-        try:
-            # Read user input
-            user_command = input().strip()
-
-            # Check if the command is in the list of valid commands
-            if user_command not in valid_commands:
-                # Print the error message with a newline character
-                print(f"{user_command}: command not found")
-        except EOFError:
-            # Handle end-of-file gracefully
+        # Wait for user input
+        command = input()
+        if command == "exit 0":
             break
-
+        print(f"{command}: command not found")
+        
 if __name__ == "__main__":
     main()
