@@ -14,9 +14,9 @@ def main():
         sys.stdout.write("$ ")
         sys.stdout.flush()
     # Wait for user input
-        user_command = input().strip()
+        user_command = input()
         if user_command not in valid_commands:
-            print(f"${user_command}: command not found\n")
+            print(f"${user_command}: command not found")
             continue
 
 
