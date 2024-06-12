@@ -1,19 +1,30 @@
 import sys
 
 def main():
-
+    builtins = ["echo", "exit", "type"]
+    
     while True:
-
+        
         sys.stdout.write("$ ")
         sys.stdout.flush()
-        if bulletin_commands := input().strip():
-            if bulletin_commands == "exit 0":
-                sys.exit(0)
-        if bulletin_commands in bulletin_commands:
-            print(f"{bulletin_commands} is a {bulletin_commands[bulletin_commands]}")
-    else:
-        print(f"{bulletin_commands}: not found")
+        
+        # Wait for user input
+        full_command = input()
+        command_array = full_command.split()
+        command = command_array[0]
+        
+        if command == "exit":
+            break
+        elif command == "echo":
+            print(" ".join(command_array[1:]))
+        elif command == "type":
+            evaled_command = command_array[1]
+            if evaled_command in builtins:
+                print(f"{evaled_command} is a shell builtin")
+            else:
+                print(f"{evaled_command} not found")
+        else:
+            print(f"{command}: command not found")
 
-                
 if __name__ == "__main__":
     main()
