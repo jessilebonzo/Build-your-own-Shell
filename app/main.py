@@ -1,45 +1,35 @@
-import sys
 import os
+import sys
+
 
 def find_in_path(param):
-    path = os.environ['PATH']
-    print("Path: " + path)
-    print(f"Param: {param}")
-    for directory in path.split(":"):
-        for (dirpath, dirnames, filenames) in os.walk(directory):
-            if param in filenames:
-                return f"{dirpath}/{param}"
+    for directory in os.environ['PATH'].split(":"):
+        for root, _, files in os.walk(directory):
+            if param in files:
+                return os.path.join(root, param)
     return None
 
 def main():
 
 
     while True:
-        sys.stdout.write("$ ")
-        sys.stdout.flush()
-        # Wait for user input
-        command = input()
-        match command.split(" "):
-            case ["exit", "0"]:
-                exit(0)
-            case ["echo", *cmd]:
-                print(" ".join(cmd))
-            case ["type", *cmd]:
-                match cmd:
-                    case ["echo" | "exit" | "type"]:
-                        print(f"${cmd[0]} is a shell builtin")
-                    case _:
-                        location = find_in_path(cmd[0])
-                        if location:
-                            print(f"${cmd[0]} is {location}")
-                        else:
-                            print(f"${" ".join(cmd)} not found")
-            case _:
-                print(f"{command}: command not found")
-                if os.path.isfile(command.split(" ")[0]):
-                    os.system(command)
-                else:
-                    print(f"{command}: command not found")
+        command = input("$ ").strip().split()
+        if not command:
+            continue
+        cmd, *args = command
+
+        if cmd == "exit" and args == ["0"]:
+            exit(0)
+        elif cmd == "echo":
+            print(" ".join(args))
+        elif cmd == "type":
+            if args and args[0] in ["echo", "exit", "type"]:
+                print(f"{args[0]} is a shell builtin")
+            else:
+                location = find_in_path(args[0])
+                print(f"{args[0]} is {location}" if location else f"{' '.join(args)} not found")
+        else:
+            print(f"{cmd}: command not found")
 
 if __name__ == "__main__":
     main()
