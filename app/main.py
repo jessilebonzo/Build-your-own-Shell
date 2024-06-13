@@ -1,17 +1,17 @@
-import os
 import sys
-
+import os
 
 def find_in_path(param):
     for directory in os.environ['PATH'].split(":"):
-        for root, _, files in os.walk(directory):
-            if param in files:
-                return os.path.join(root, param)
+        if os.path.isdir(directory):  # Ensure the directory exists
+            for root, _, files in os.walk(directory):
+                if param in files:
+                    return os.path.join(root, param)
     return None
 
 def main():
 
-
+    
     while True:
         command = input("$ ").strip().split()
         if not command:
@@ -29,7 +29,10 @@ def main():
                 location = find_in_path(args[0])
                 print(f"{args[0]} is {location}" if location else f"{' '.join(args)} not found")
         else:
-            print(f"{cmd}: command not found")
+            if os.path.isfile(cmd):
+                os.system(" ".join(command))
+            else:
+                print(f"{cmd}: command not found")
 
 if __name__ == "__main__":
     main()
