@@ -11,7 +11,7 @@ def find_in_path(param):
     return None
 
 def main():
-
+    
     while True:
         sys.stdout.write("$ ")
         sys.stdout.flush()
@@ -33,7 +33,6 @@ def main():
                         else:
                             print(f"${''.join(cmd)} not found")
             case _:
-                print(f"{command}: command not found")
                 if os.path.isfile(command.split(" ")[0]):
                     os.system(command)
                 else:
@@ -41,4 +40,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
