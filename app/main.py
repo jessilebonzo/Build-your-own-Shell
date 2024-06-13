@@ -2,7 +2,7 @@ import os
 import sys
 
 def main():
-    builtin_cmds = ["echo", "exit", "type"]
+    builtin_cmds = ["echo", "exit", "type", "cd"]
     PATH = os.environ.get("PATH", "")
     
     while True:
@@ -10,7 +10,7 @@ def main():
         sys.stdout.write("$ ")
         sys.stdout.flush()
         user_input = input().strip()
-        
+
         if user_input == "exit 0":
             break
 
@@ -38,7 +38,16 @@ def main():
                 sys.stdout.write(f"{cmd}: not found\n")
             sys.stdout.flush()
             continue
-        
+
+        if user_input.startswith("cd"):
+            directory = user_input.split(" ", 1)[1]
+            try:
+                os.chdir(os.path.expanduser(directory))
+            except OSError:
+                sys.stdout.write(f"cd: {directory}: No such file or directory\n")
+            sys.stdout.flush()
+            continue
+
         # Check if the command is a file in the current directory or PATH and execute it
         cmd_parts = user_input.split(" ")
         cmd = cmd_parts[0]
