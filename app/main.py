@@ -1,5 +1,6 @@
 import os
 import sys
+
 def main():
     builtin_cmds = ["echo", "exit", "type"]
     PATH = os.environ.get("PATH", "")
@@ -30,18 +31,19 @@ def main():
             )
             if cmd in builtin_cmds:
                 sys.stdout.write(f"{cmd} is a shell builtin\n")
+            elif cmd_path:
+                sys.stdout.write(f"{cmd} is {cmd_path}\n")
             else:
-                print(f"{evaled_command} not found")
-        else:
-                sys.stdout.write(
-                    f"{cmd}: not found\n"
-                    if cmd_path is None
-                    else f"{cmd} is {cmd_path}\n")
-        sys.stdout.flush()
-        continue
+                sys.stdout.write(f"{cmd}: not found\n")
+            sys.stdout.flush()
+            continue
 
-        sys.stdout.write(f"{user_input}: command not found\n")
-        sys.stdout.flush()
+        # Check if the command is a file and execute it
+        if os.path.isfile(user_input.split(" ")[0]):
+            os.system(user_input)
+        else:
+            sys.stdout.write(f"{user_input}: command not found\n")
+            sys.stdout.flush()
 
 if __name__ == "__main__":
     main()
