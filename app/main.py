@@ -4,12 +4,13 @@ import sys
 def main():
     builtin_cmds = ["echo", "exit", "type"]
     PATH = os.environ.get("PATH", "")
+    
     while True:
-
+        
         sys.stdout.write("$ ")
         sys.stdout.flush()
-        user_input = input()
-
+        user_input = input().strip()
+        
         if user_input == "exit 0":
             break
 
@@ -37,9 +38,19 @@ def main():
                 sys.stdout.write(f"{cmd}: not found\n")
             sys.stdout.flush()
             continue
-
-        # Check if the command is a file and execute it
-        if os.path.isfile(user_input.split(" ")[0]):
+        
+        # Check if the command is a file in the current directory or PATH and execute it
+        cmd_parts = user_input.split(" ")
+        cmd = cmd_parts[0]
+        cmd_path = next(
+            (
+                path
+                for path in (['.'] + PATH.split(":"))
+                if os.path.isfile(f"{path}/{cmd}")
+            ),
+            None
+        )
+        if cmd_path:
             os.system(user_input)
         else:
             sys.stdout.write(f"{user_input}: command not found\n")
